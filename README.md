@@ -22,6 +22,7 @@ A dynamic, cinematic marketing storytelling web application that transforms NASA
 **"Beyond Earth - Journey Through Space"**
 
 Our campaign takes visitors on an emotional journey:
+
 1. **Hero Section**: Bold statement about humanity's cosmic destiny
 2. **Story Timeline**: Historical narrative of space exploration
 3. **Visual Gallery**: Curated NASA imagery with interactive elements
@@ -32,6 +33,7 @@ Our campaign takes visitors on an emotional journey:
 ## ✨ Features
 
 ### Core Functionality
+
 - ✅ **NASA API Integration** - APOD, Mars Rover Photos, EPIC Earth images
 - ✅ **Scroll-Based Storytelling** - Framer Motion animations
 - ✅ **3D Visualization** - Interactive Earth sphere with Three.js
@@ -44,12 +46,14 @@ Our campaign takes visitors on an emotional journey:
 ### Technical Stack
 
 **Backend:**
+
 - Laravel 10.x
 - MySQL Database
 - Guzzle HTTP Client
 - API Caching Strategy
 
 **Frontend:**
+
 - React 18.x
 - Inertia.js (SPA behavior)
 - Framer Motion (animations)
@@ -70,28 +74,33 @@ Our campaign takes visitors on an emotional journey:
 ### Installation
 
 1. **Clone the repository**
+
 ```bash
 git clone https://github.com/yourusername/beyond-earth.git
 cd beyond-earth
 ```
 
 2. **Install PHP dependencies**
+
 ```bash
 composer install
 ```
 
 3. **Install Node dependencies**
+
 ```bash
 npm install
 ```
 
 4. **Environment setup**
+
 ```bash
 cp .env.example .env
 php artisan key:generate
 ```
 
 5. **Configure your `.env` file**
+
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
@@ -105,6 +114,7 @@ NASA_API_BASE_URL=https://api.nasa.gov
 ```
 
 6. **Create database**
+
 ```bash
 mysql -u root -p
 CREATE DATABASE beyond_earth;
@@ -112,11 +122,13 @@ exit;
 ```
 
 7. **Run migrations**
+
 ```bash
 php artisan migrate
 ```
 
 8. **Build assets**
+
 ```bash
 npm run build
 ```
@@ -124,16 +136,19 @@ npm run build
 9. **Start development servers**
 
 Terminal 1 (Laravel):
+
 ```bash
 php artisan serve
 ```
 
 Terminal 2 (Vite):
+
 ```bash
 npm run dev
 ```
 
 10. **Visit the application**
+
 ```
 http://localhost:8000
 ```
@@ -143,16 +158,19 @@ http://localhost:8000
 This project uses three NASA APIs:
 
 ### 1. Astronomy Picture of the Day (APOD)
+
 - **Endpoint**: `/api/nasa/apod`
 - **Purpose**: Stunning daily space imagery
 - **Usage**: Story timeline and gallery sections
 
 ### 2. Mars Rover Photos
+
 - **Endpoint**: `/api/nasa/mars-photos`
 - **Purpose**: Images from Curiosity rover
 - **Usage**: Mars journey section
 
 ### 3. EPIC (Earth Polychromatic Imaging Camera)
+
 - **Endpoint**: `/api/nasa/epic`
 - **Purpose**: Full-disc Earth images
 - **Usage**: Interactive Earth section
@@ -162,6 +180,7 @@ All API responses are cached in MySQL for 1 hour to optimize performance.
 ## 🎨 Design Philosophy
 
 ### Marketing Approach
+
 This app is designed as a **marketing campaign**, not a data dashboard:
 
 - **Emotional Connection**: Story-driven content that inspires wonder
@@ -171,6 +190,7 @@ This app is designed as a **marketing campaign**, not a data dashboard:
 - **Brand Consistency**: Cohesive color scheme and typography
 
 ### Color Palette
+
 ```css
 Space Dark: #0a0e27
 Cosmic Purple: #a855f7
@@ -180,12 +200,14 @@ Cosmic Cyan: #06b6d4
 ```
 
 ### Typography
+
 - **Display Font**: Space Grotesk (headings)
 - **Body Font**: Inter (content)
 
 ## 💾 Database Schema
 
 ### Favorites Table
+
 ```sql
 - id (primary key)
 - session_id (indexed)
@@ -199,6 +221,7 @@ Cosmic Cyan: #06b6d4
 ```
 
 ### Feedback Table
+
 ```sql
 - id (primary key)
 - session_id (indexed)
@@ -246,21 +269,25 @@ Cosmic Cyan: #06b6d4
 ### Internal Endpoints
 
 #### Get APOD Images
+
 ```http
 GET /api/nasa/apod?count=5
 ```
 
 #### Get Mars Photos
+
 ```http
 GET /api/nasa/mars-photos?sol=1000
 ```
 
 #### Get EPIC Images
+
 ```http
 GET /api/nasa/epic
 ```
 
 #### Save Favorite
+
 ```http
 POST /favorites
 Content-Type: application/json
@@ -276,16 +303,19 @@ Content-Type: application/json
 ```
 
 #### Get Favorites
+
 ```http
 GET /favorites
 ```
 
 #### Delete Favorite
+
 ```http
 DELETE /favorites/{id}
 ```
 
 #### Submit Feedback
+
 ```http
 POST /feedback
 Content-Type: application/json
@@ -335,4 +365,4 @@ Give a ⭐️ if this project inspired you!
 
 ---
 
-**Beyond Earth** - *Exploring the cosmos, one API call at a time* 🚀🌌
+**Beyond Earth** - _Exploring the cosmos, one API call at a time_ 🚀🌌

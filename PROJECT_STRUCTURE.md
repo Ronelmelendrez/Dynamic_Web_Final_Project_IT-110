@@ -83,11 +83,13 @@ beyond-earth/
 ## 🎨 Frontend Components Breakdown
 
 ### Layout Components (3)
+
 - `Layout.jsx` - Main wrapper with StarField
 - `Navbar.jsx` - Fixed navigation
 - `Footer.jsx` - Footer with links
 
 ### Content Components (8)
+
 - `StarField.jsx` - Canvas-based star animation
 - `Hero.jsx` - Landing hero section
 - `StoryTimeline.jsx` - Animated timeline
@@ -98,25 +100,30 @@ beyond-earth/
 - `FeedbackSection.jsx` - Feedback form
 
 ### Utility Components (1)
+
 - `CallToAction.jsx` - Final engagement section
 
 ## 🔧 Backend Structure
 
 ### Controllers (3)
+
 - `NasaController` - Handles NASA API requests
 - `FavoriteController` - CRUD for favorites
 - `FeedbackController` - CRUD for feedback
 
 ### Services (1)
+
 - `NasaApiService` - NASA API integration logic
 
 ### Models (2)
+
 - `Favorite` - User favorite items
 - `Feedback` - User feedback entries
 
 ## 🗄️ Database Tables
 
 ### `favorites`
+
 ```sql
 - id, session_id, item_type, item_id
 - title, image_url, description, metadata
@@ -124,6 +131,7 @@ beyond-earth/
 ```
 
 ### `feedback`
+
 ```sql
 - id, session_id, name, email
 - message, rating
@@ -133,11 +141,13 @@ beyond-earth/
 ## 📦 Key Dependencies
 
 ### PHP (Composer)
+
 - `laravel/framework` - Laravel 10
 - `inertiajs/inertia-laravel` - Inertia.js adapter
 - `guzzlehttp/guzzle` - HTTP client
 
 ### JavaScript (NPM)
+
 - `react` & `react-dom` - UI library
 - `@inertiajs/react` - Inertia React adapter
 - `framer-motion` - Animation library
@@ -150,10 +160,12 @@ beyond-earth/
 ## 🚀 Entry Points
 
 ### Development
+
 - **Backend**: `php artisan serve` → `public/index.php`
 - **Frontend**: `npm run dev` → `resources/js/app.jsx`
 
 ### Production
+
 - **Build**: `npm run build` → `public/build/`
 - **Server**: Apache/Nginx → `public/index.php`
 
@@ -189,15 +201,15 @@ User Interface
 
 ## 🎯 Main Features Mapping
 
-| Feature | Frontend Component | Backend Controller | Database Table |
-|---------|-------------------|-------------------|---------------|
-| Hero Section | `Hero.jsx` | - | - |
-| Story Timeline | `StoryTimeline.jsx` | `NasaController` | - |
-| Image Gallery | `GallerySection.jsx` | `NasaController` | - |
-| Mars Photos | `MarsJourney.jsx` | `NasaController` | - |
-| 3D Earth | `InteractiveEarth.jsx` | `NasaController` | - |
-| Favorites | `FavoritesSection.jsx` | `FavoriteController` | `favorites` |
-| Feedback | `FeedbackSection.jsx` | `FeedbackController` | `feedback` |
+| Feature        | Frontend Component     | Backend Controller   | Database Table |
+| -------------- | ---------------------- | -------------------- | -------------- |
+| Hero Section   | `Hero.jsx`             | -                    | -              |
+| Story Timeline | `StoryTimeline.jsx`    | `NasaController`     | -              |
+| Image Gallery  | `GallerySection.jsx`   | `NasaController`     | -              |
+| Mars Photos    | `MarsJourney.jsx`      | `NasaController`     | -              |
+| 3D Earth       | `InteractiveEarth.jsx` | `NasaController`     | -              |
+| Favorites      | `FavoritesSection.jsx` | `FavoriteController` | `favorites`    |
+| Feedback       | `FeedbackSection.jsx`  | `FeedbackController` | `feedback`     |
 
 ## 🔐 Protected Files (.gitignore)
 

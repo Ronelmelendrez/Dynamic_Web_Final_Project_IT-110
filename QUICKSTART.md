@@ -5,6 +5,7 @@ Get up and running in 5 minutes!
 ## Prerequisites Checklist
 
 Before starting, ensure you have:
+
 - [ ] PHP 8.1+ installed
 - [ ] Composer installed
 - [ ] Node.js 18+ installed
@@ -67,11 +68,13 @@ php artisan migrate
 Open TWO terminal windows:
 
 **Terminal 1:**
+
 ```bash
 php artisan serve
 ```
 
 **Terminal 2:**
+
 ```bash
 npm run dev
 ```
@@ -79,6 +82,7 @@ npm run dev
 ### Step 6: Visit the App! 🎉
 
 Open your browser:
+
 ```
 http://localhost:8000
 ```
@@ -100,6 +104,7 @@ http://localhost:8000
 ## ❌ Common Issues & Quick Fixes
 
 ### Database Connection Failed
+
 ```bash
 # Check MySQL is running
 net start MySQL80
@@ -108,6 +113,7 @@ net start MySQL80
 ```
 
 ### NASA API Not Loading
+
 ```env
 # In .env, you can use DEMO_KEY for testing:
 NASA_API_KEY=DEMO_KEY
@@ -117,6 +123,7 @@ NASA_API_KEY=DEMO_KEY
 ```
 
 ### Port 8000 Already in Use
+
 ```bash
 # Use different port
 php artisan serve --port=8001
@@ -124,6 +131,7 @@ php artisan serve --port=8001
 ```
 
 ### Vite Errors
+
 ```bash
 # Clear node modules and reinstall
 rmdir /s node_modules
@@ -155,6 +163,7 @@ npm run dev
 ## 🆘 Need Help?
 
 Check logs:
+
 ```bash
 # Laravel logs
 tail -f storage/logs/laravel.log
@@ -169,6 +178,7 @@ tail -f storage/logs/laravel.log
 ### Change Colors
 
 Edit `tailwind.config.js`:
+
 ```javascript
 colors: {
   cosmic: {
@@ -182,6 +192,7 @@ colors: {
 ### Change Text
 
 Edit `resources/js/Components/Hero.jsx`:
+
 ```javascript
 <h1>Your Custom Title</h1>
 <p>Your custom description</p>

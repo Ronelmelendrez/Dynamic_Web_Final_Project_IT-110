@@ -3,6 +3,7 @@
 This guide will walk you through setting up the Beyond Earth project from scratch on your local machine.
 
 ## Table of Contents
+
 1. [System Requirements](#system-requirements)
 2. [Installation Steps](#installation-steps)
 3. [Database Setup](#database-setup)
@@ -15,6 +16,7 @@ This guide will walk you through setting up the Beyond Earth project from scratc
 ## System Requirements
 
 ### Required Software
+
 - **PHP**: 8.1 or higher
 - **Composer**: Latest version
 - **Node.js**: 18.x or higher
@@ -23,6 +25,7 @@ This guide will walk you through setting up the Beyond Earth project from scratc
 - **Git**: Latest version
 
 ### Recommended Tools
+
 - **VS Code** with extensions:
   - PHP Intelephense
   - Laravel Extension Pack
@@ -55,11 +58,13 @@ mysql --version
 ### 1. Clone or Navigate to Project
 
 If you already have the project files:
+
 ```bash
 cd c:\Users\ronel\OneDrive\Desktop\Final_project_110
 ```
 
 If cloning from GitHub:
+
 ```bash
 git clone <repository-url>
 cd beyond-earth
@@ -72,6 +77,7 @@ composer install
 ```
 
 **Note**: If you encounter errors, you may need to install PHP extensions:
+
 - php-mbstring
 - php-xml
 - php-curl
@@ -84,6 +90,7 @@ npm install
 ```
 
 This will install:
+
 - React
 - Inertia.js
 - Framer Motion
@@ -94,11 +101,13 @@ This will install:
 ### 4. Environment Configuration
 
 Copy the example environment file:
+
 ```bash
 copy .env.example .env
 ```
 
 Generate application key:
+
 ```bash
 php artisan key:generate
 ```
@@ -110,17 +119,20 @@ php artisan key:generate
 ### 1. Create Database
 
 **Option A: Using MySQL CLI**
+
 ```bash
 mysql -u root -p
 ```
 
 Then in MySQL:
+
 ```sql
 CREATE DATABASE beyond_earth CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 exit;
 ```
 
 **Option B: Using phpMyAdmin**
+
 1. Open phpMyAdmin
 2. Click "New" to create database
 3. Name it: `beyond_earth`
@@ -149,6 +161,7 @@ php artisan migrate
 ```
 
 You should see:
+
 ```
 Migration table created successfully.
 Migrating: 2024_01_01_000001_create_favorites_table
@@ -168,6 +181,7 @@ SHOW TABLES;
 ```
 
 You should see:
+
 - favorites
 - feedback
 - migrations
@@ -202,6 +216,7 @@ CACHE_DURATION=3600
 ### 3. Test API Connection
 
 You can test if the API is working by visiting (after starting the server):
+
 ```
 http://localhost:8000/api/nasa/apod?count=1
 ```
@@ -215,21 +230,25 @@ http://localhost:8000/api/nasa/apod?count=1
 You need to run TWO commands in separate terminal windows:
 
 **Terminal 1: Laravel Backend**
+
 ```bash
 php artisan serve
 ```
 
 You should see:
+
 ```
 Starting Laravel development server: http://127.0.0.1:8000
 ```
 
 **Terminal 2: Vite Frontend**
+
 ```bash
 npm run dev
 ```
 
 You should see:
+
 ```
 VITE v4.x.x  ready in xxx ms
 
@@ -239,6 +258,7 @@ VITE v4.x.x  ready in xxx ms
 ### 3. Access the Application
 
 Open your browser and navigate to:
+
 ```
 http://localhost:8000
 ```
@@ -252,11 +272,13 @@ http://localhost:8000
 When ready to deploy or test production build:
 
 ### 1. Build Assets
+
 ```bash
 npm run build
 ```
 
 ### 2. Optimize Laravel
+
 ```bash
 php artisan config:cache
 php artisan route:cache
@@ -264,7 +286,9 @@ php artisan view:cache
 ```
 
 ### 3. Set Environment
+
 In `.env`:
+
 ```env
 APP_ENV=production
 APP_DEBUG=false
@@ -277,6 +301,7 @@ APP_DEBUG=false
 ### Issue: "Class 'X' not found"
 
 **Solution**: Clear and rebuild caches
+
 ```bash
 composer dump-autoload
 php artisan config:clear
@@ -287,7 +312,9 @@ php artisan view:clear
 ### Issue: Database connection refused
 
 **Solutions**:
+
 1. Check MySQL is running:
+
    ```bash
    # Windows
    net start MySQL80
@@ -304,6 +331,7 @@ php artisan view:clear
 ### Issue: Vite manifest not found
 
 **Solution**: Build assets
+
 ```bash
 npm run build
 ```
@@ -313,6 +341,7 @@ Or ensure `npm run dev` is running in development.
 ### Issue: Port 8000 already in use
 
 **Solution**: Use different port
+
 ```bash
 php artisan serve --port=8001
 ```
@@ -322,6 +351,7 @@ Then access at `http://localhost:8001`
 ### Issue: NASA API rate limit exceeded
 
 **Solutions**:
+
 1. Get your own API key (not DEMO_KEY)
 2. Increase `CACHE_DURATION` in `.env`
 3. Clear Laravel cache:
@@ -332,6 +362,7 @@ Then access at `http://localhost:8001`
 ### Issue: Animations not working
 
 **Solutions**:
+
 1. Clear browser cache
 2. Check browser console for errors
 3. Ensure `npm run dev` is running
@@ -340,6 +371,7 @@ Then access at `http://localhost:8001`
 ### Issue: 3D Earth not rendering
 
 **Solutions**:
+
 1. Check WebGL support: [https://get.webgl.org/](https://get.webgl.org/)
 2. Update graphics drivers
 3. Try different browser

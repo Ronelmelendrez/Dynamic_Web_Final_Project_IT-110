@@ -29,6 +29,7 @@ git remote -v
 ```
 
 **Example:**
+
 ```bash
 git remote add origin https://github.com/johndoe/beyond-earth.git
 ```
@@ -44,10 +45,12 @@ git push -u origin main
 ### If Using Personal Access Token
 
 If prompted for credentials:
+
 1. **Username**: Your GitHub username
 2. **Password**: Use Personal Access Token (NOT your GitHub password)
 
 **To create a Personal Access Token:**
+
 1. GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic)
 2. Generate new token
 3. Select scopes: `repo` (full control)
@@ -126,6 +129,7 @@ git pull
 ### Already Protected ✅
 
 The `.gitignore` file already excludes:
+
 - `.env` (contains passwords and API keys)
 - `node_modules/`
 - `vendor/`
@@ -154,6 +158,7 @@ git push
 ### Add Topics
 
 In your GitHub repo:
+
 1. Click ⚙️ settings icon next to "About"
 2. Add topics:
    - `laravel`
@@ -174,6 +179,7 @@ In your GitHub repo:
 ### Create Description
 
 Use:
+
 ```
 🚀 Beyond Earth - A cinematic marketing storytelling web application that transforms NASA's data into an immersive journey through space. Built with Laravel, React, and Inertia.js.
 ```
@@ -193,6 +199,7 @@ mkdir .github
 ### Add LICENSE
 
 Create `LICENSE` file:
+
 ```
 MIT License
 
@@ -205,6 +212,7 @@ Permission is hereby granted, free of charge, to any person obtaining a copy...
 ### Add Contributing Guidelines
 
 Create `CONTRIBUTING.md`:
+
 ```markdown
 # Contributing to Beyond Earth
 
@@ -230,23 +238,23 @@ name: Laravel
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.1'
-    - name: Install Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-    - name: Execute tests
-      run: php artisan test
+      - uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+      - name: Install Dependencies
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Execute tests
+        run: php artisan test
 ```
 
 ---
@@ -268,6 +276,7 @@ jobs:
 ```
 
 Commit and push:
+
 ```bash
 git add screenshots/
 git add README.md
@@ -282,6 +291,7 @@ git push
 ### Create a Great README
 
 Your README should have:
+
 - ✅ Clear project title and description
 - ✅ Screenshots/GIFs
 - ✅ Installation instructions
@@ -294,6 +304,7 @@ Your README should have:
 ### Pin Repository
 
 On your GitHub profile:
+
 1. Go to your profile
 2. Click "Customize your pins"
 3. Select "beyond-earth"
@@ -336,6 +347,7 @@ git push origin main
 ## ✅ Final Checklist
 
 Before pushing:
+
 - [ ] `.env` file is NOT tracked
 - [ ] All sensitive data is protected
 - [ ] README.md is complete and accurate
@@ -364,6 +376,7 @@ Before pushing:
 Want cool stats on your README?
 
 Add shields:
+
 ```markdown
 ![Stars](https://img.shields.io/github/stars/YOUR_USERNAME/beyond-earth)
 ![Forks](https://img.shields.io/github/forks/YOUR_USERNAME/beyond-earth)
@@ -377,6 +390,7 @@ Add shields:
 Your project is now on GitHub and ready to share with the world!
 
 **Next Steps:**
+
 1. Share the repository link in your assignment submission
 2. Add it to your portfolio
 3. Continue improving the project
