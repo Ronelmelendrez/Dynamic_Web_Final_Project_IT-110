@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaHeart, FaTrash, FaStar } from "react-icons/fa";
+import axios from "axios";
 
 export default function FavoritesSection() {
   const [favorites, setFavorites] = useState([]);
