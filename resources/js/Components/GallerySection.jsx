@@ -6,9 +6,11 @@ import axios from "axios";
 export default function GallerySection({ apodData, loading }) {
   const [selectedImage, setSelectedImage] = useState(null);
   const [favorites, setFavorites] = useState([]);
+  const [savingFavorite, setSavingFavorite] = useState(null);
 
   const handleFavorite = async (item) => {
     try {
+      setSavingFavorite(item.date);
       const response = await axios.post("/favorites", {
         item_type: "apod",
         item_id: item.date,
@@ -21,11 +23,16 @@ export default function GallerySection({ apodData, loading }) {
         }),
       });
 
-      if (response.status === 201) {
+      if (response.status === 201 || response.status === 200) {
         setFavorites([...favorites, item.date]);
+        // Show success notification
+        alert("✨ Added to your favorites!");
       }
     } catch (error) {
       console.error("Error saving favorite:", error);
+      alert("Error saving favorite. Please try again.");
+    } finally {
+      setSavingFavorite(null);
     }
   };
 
@@ -133,17 +140,18 @@ export default function GallerySection({ apodData, loading }) {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onClick={() => handleFavorite(item)}
+                  disabled={isFavorited(item.date) || savingFavorite === item.date}
                   className={`flex items-center space-x-2 ${
                     isFavorited(item.date)
                       ? "text-cosmic-pink"
                       : "text-white/50 hover:text-cosmic-pink"
-                  } transition-colors`}
+                  } transition-colors ${savingFavorite === item.date ? 'opacity-50' : ''}`}
                 >
                   <FaHeart
                     className={isFavorited(item.date) ? "fill-current" : ""}
                   />
                   <span className="text-sm">
-                    {isFavorited(item.date) ? "Favorited" : "Add to Favorites"}
+                    {savingFavorite === item.date ? "Saving..." : isFavorited(item.date) ? "Favorited" : "Add to Favorites"}
                   </span>
                 </motion.button>
               </div>
