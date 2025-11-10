@@ -22,7 +22,7 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
     renderer.setClearColor(0x000000, 1);
     mountRef.current.appendChild(renderer.domElement);
 
-    // Create animated starfield with varying sizes
+    // Optimized starfield - fewer stars for faster loading
     const starsGeometry = new THREE.BufferGeometry();
     const starsMaterial = new THREE.PointsMaterial({
       color: 0xffffff,
@@ -34,7 +34,7 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
 
     const starsVertices = [];
     const starsSizes = [];
-    for (let i = 0; i < 15000; i++) {
+    for (let i = 0; i < 5000; i++) {
       const x = (Math.random() - 0.5) * 2000;
       const y = (Math.random() - 0.5) * 2000;
       const z = (Math.random() - 0.5) * 2000;
@@ -53,8 +53,8 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
     const starField = new THREE.Points(starsGeometry, starsMaterial);
     scene.add(starField);
 
-    // Create main rotating planet with bump mapping effect
-    const planetGeometry = new THREE.SphereGeometry(2.5, 64, 64);
+    // Optimized planet - lower polygon count
+    const planetGeometry = new THREE.SphereGeometry(2.5, 32, 32);
     const planetMaterial = new THREE.MeshStandardMaterial({
       color: 0x4f46e5,
       emissive: 0x2d1b69,
@@ -87,9 +87,9 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
       scene.add(ring);
     }
 
-    // Create floating asteroids/debris
+    // Fewer asteroids for faster performance
     const asteroids = [];
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 20; i++) {
       const size = Math.random() * 0.15 + 0.05;
       const asteroidGeometry = new THREE.DodecahedronGeometry(size, 0);
       const asteroidMaterial = new THREE.MeshPhongMaterial({
@@ -115,7 +115,7 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
       scene.add(asteroid);
     }
 
-    // Create glowing particles around planet
+    // Fewer particles for better performance
     const particlesGeometry = new THREE.BufferGeometry();
     const particlesMaterial = new THREE.PointsMaterial({
       color: 0x00ffff,
@@ -126,7 +126,7 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
     });
 
     const particlesVertices = [];
-    for (let i = 0; i < 1000; i++) {
+    for (let i = 0; i < 300; i++) {
       const radius = 3.5 + Math.random() * 2;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.random() * Math.PI;
@@ -225,14 +225,11 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
     };
     animate();
 
-    // Simulate loading progress
+    // Fast loading progress - complete in 2.5 seconds
     const loadingSteps = [
-      { progress: 15, text: "Initializing 3D Engine..." },
-      { progress: 30, text: "Loading cosmic assets..." },
-      { progress: 50, text: "Preparing galaxies..." },
-      { progress: 70, text: "Initializing navigation..." },
-      { progress: 90, text: "Loading star systems..." },
-      { progress: 100, text: "Ready to explore!" },
+      { progress: 33, text: "Initializing..." },
+      { progress: 66, text: "Loading..." },
+      { progress: 100, text: "Ready!" },
     ];
 
     let currentStep = 0;
@@ -245,9 +242,9 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
         clearInterval(loadingInterval);
         setTimeout(() => {
           if (onLoadingComplete) onLoadingComplete();
-        }, 500);
+        }, 300);
       }
-    }, 700);
+    }, 400);
 
     // Handle window resize
     const handleResize = () => {
@@ -261,17 +258,17 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
     return () => {
       clearInterval(loadingInterval);
       window.removeEventListener("resize", handleResize);
-      
+
       // Cancel animation frame
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
       }
-      
+
       // Dispose of Three.js objects
       if (mountRef.current && renderer.domElement) {
         mountRef.current.removeChild(renderer.domElement);
       }
-      
+
       // Dispose geometries and materials
       starsGeometry.dispose();
       starsMaterial.dispose();
@@ -279,17 +276,17 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
       planetMaterial.dispose();
       particlesGeometry.dispose();
       particlesMaterial.dispose();
-      
+
       rings.forEach((ring) => {
         ring.geometry.dispose();
         ring.material.dispose();
       });
-      
+
       asteroids.forEach((asteroid) => {
         asteroid.geometry.dispose();
         asteroid.material.dispose();
       });
-      
+
       renderer.dispose();
     };
   }, [onLoadingComplete]);
