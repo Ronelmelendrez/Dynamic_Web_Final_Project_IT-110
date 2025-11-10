@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Head } from "@inertiajs/react";
+import axios from "axios";
 import Layout from "../Components/Layout";
 import Hero from "../Components/Hero";
 import StoryTimeline from "../Components/StoryTimeline";

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaHeart, FaTimes } from 'react-icons/fa';
+import axios from 'axios';
 
 export default function GallerySection({ apodData, loading }) {
     const [selectedImage, setSelectedImage] = useState(null);
