@@ -30,7 +30,49 @@ Our campaign takes visitors on an emotional journey:
 5. **Earth Perspective**: 3D interactive Earth with the "Overview Effect"
 6. **User Engagement**: Personal connection through favorites and feedback
 
-## ✨ Features
+## Next Steps
+
+1. **Start XAMPP MySQL**: Open XAMPP Control Panel and start the MySQL service
+
+2. **Create the Database**:
+
+   - Open phpMyAdmin (http://localhost/phpmyadmin)
+   - Create a new database called `beyond_earth`
+   - OR run: `mysql -u root -e "CREATE DATABASE beyond_earth;"`
+
+3. **Update NASA API Key** (Optional for testing):
+
+   - Get your free API key from https://api.nasa.gov/
+   - Update `.env` file: `NASA_API_KEY=your_actual_key_here`
+   - (DEMO_KEY works but has rate limits)
+
+4. **Run Database Migrations**:
+
+   ```bash
+   php artisan migrate
+   ```
+
+5. **Start the Development Servers**:
+
+   **Terminal 1 - Laravel Backend**:
+
+   ```bash
+   php artisan serve
+   ```
+
+   **Terminal 2 - Vite Frontend**:
+
+   ```bash
+   npm run dev
+   ```
+
+6. **Access the Application**:
+   - Open your browser to: http://localhost:8000
+   - The application will automatically reload when you make changes
+
+---
+
+## Quick Reference
 
 ### Core Functionality
 
