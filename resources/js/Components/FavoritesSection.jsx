@@ -3,30 +3,18 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaHeart, FaTrash, FaStar } from "react-icons/fa";
 import axios from "axios";
 
-export default function FavoritesSection({ refreshTrigger }) {
-  const [favorites, setFavorites] = useState([]);
+export default function FavoritesSection({ refreshTrigger, favoritesFull = [], setFavoritesFull = () => {} }) {
   const [loading, setLoading] = useState(true);
 
+  // If parent passes favoritesFull we use it; otherwise we could fetch, but parent now provides it
   useEffect(() => {
-    fetchFavorites();
-  }, [refreshTrigger]); // Re-fetch when refreshTrigger changes
-
-  const fetchFavorites = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get("/favorites");
-      setFavorites(response.data);
-    } catch (error) {
-      console.error("Error fetching favorites:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    setLoading(false);
+  }, [favoritesFull, refreshTrigger]);
 
   const removeFavorite = async (id) => {
     try {
       await axios.delete(`/favorites/${id}`);
-      setFavorites(favorites.filter((fav) => fav.id !== id));
+      setFavoritesFull((prev) => prev.filter((fav) => fav.id !== id));
     } catch (error) {
       console.error("Error removing favorite:", error);
     }
@@ -64,7 +52,7 @@ export default function FavoritesSection({ refreshTrigger }) {
           <div className="text-center">
             <div className="inline-block w-16 h-16 border-4 border-cosmic-purple border-t-transparent rounded-full animate-spin" />
           </div>
-        ) : favorites.length === 0 ? (
+  ) : favoritesFull.length === 0 ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -90,7 +78,7 @@ export default function FavoritesSection({ refreshTrigger }) {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <AnimatePresence>
-              {favorites.map((favorite, index) => (
+              {favoritesFull.map((favorite, index) => (
                 <motion.div
                   key={favorite.id}
                   initial={{ opacity: 0, scale: 0.8 }}
