@@ -3,13 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { FaHeart, FaTrash, FaStar } from "react-icons/fa";
 import axios from "axios";
 
-export default function FavoritesSection() {
+export default function FavoritesSection({ refreshTrigger }) {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchFavorites();
-  }, []);
+  }, [refreshTrigger]); // Re-fetch when refreshTrigger changes
 
   const fetchFavorites = async () => {
     try {
