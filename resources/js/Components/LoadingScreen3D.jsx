@@ -68,7 +68,12 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
     const rings = [];
     const ringColors = [0xec4899, 0x8b5cf6, 0x06b6d4];
     for (let i = 0; i < 3; i++) {
-      const ringGeometry = new THREE.TorusGeometry(3.5 + i * 0.5, 0.08, 16, 100);
+      const ringGeometry = new THREE.TorusGeometry(
+        3.5 + i * 0.5,
+        0.08,
+        16,
+        100
+      );
       const ringMaterial = new THREE.MeshPhongMaterial({
         color: ringColors[i],
         emissive: ringColors[i],
@@ -92,20 +97,20 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
         emissive: 0x222222,
       });
       const asteroid = new THREE.Mesh(asteroidGeometry, asteroidMaterial);
-      
+
       const distance = 6 + Math.random() * 8;
       const angle = Math.random() * Math.PI * 2;
       asteroid.position.x = Math.cos(angle) * distance;
       asteroid.position.y = (Math.random() - 0.5) * 10;
       asteroid.position.z = Math.sin(angle) * distance;
-      
+
       asteroid.userData = {
         rotationSpeed: (Math.random() - 0.5) * 0.02,
         orbitSpeed: Math.random() * 0.001 + 0.0005,
         orbitRadius: distance,
         orbitAngle: angle,
       };
-      
+
       asteroids.push(asteroid);
       scene.add(asteroid);
     }
@@ -125,11 +130,11 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
       const radius = 3.5 + Math.random() * 2;
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.random() * Math.PI;
-      
+
       const x = radius * Math.sin(phi) * Math.cos(theta);
       const y = radius * Math.sin(phi) * Math.sin(theta);
       const z = radius * Math.cos(phi);
-      
+
       particlesVertices.push(x, y, z);
     }
 
@@ -137,7 +142,10 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
       "position",
       new THREE.Float32BufferAttribute(particlesVertices, 3)
     );
-    const particleSystem = new THREE.Points(particlesGeometry, particlesMaterial);
+    const particleSystem = new THREE.Points(
+      particlesGeometry,
+      particlesMaterial
+    );
     scene.add(particleSystem);
 
     // Add dynamic lights
@@ -163,10 +171,11 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
 
     // Animation variables
     let time = 0;
+    let animationFrameId = null;
 
     // Animation loop
     const animate = () => {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
       time += 0.01;
 
       // Rotate planet with wobble effect
@@ -184,11 +193,15 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
         // Rotate asteroid
         asteroid.rotation.x += asteroid.userData.rotationSpeed;
         asteroid.rotation.y += asteroid.userData.rotationSpeed * 0.5;
-        
+
         // Orbit around planet
         asteroid.userData.orbitAngle += asteroid.userData.orbitSpeed;
-        asteroid.position.x = Math.cos(asteroid.userData.orbitAngle) * asteroid.userData.orbitRadius;
-        asteroid.position.z = Math.sin(asteroid.userData.orbitAngle) * asteroid.userData.orbitRadius;
+        asteroid.position.x =
+          Math.cos(asteroid.userData.orbitAngle) *
+          asteroid.userData.orbitRadius;
+        asteroid.position.z =
+          Math.sin(asteroid.userData.orbitAngle) *
+          asteroid.userData.orbitRadius;
       });
 
       // Rotate particle system
@@ -248,7 +261,35 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
     return () => {
       clearInterval(loadingInterval);
       window.removeEventListener("resize", handleResize);
-      mountRef.current?.removeChild(renderer.domElement);
+      
+      // Cancel animation frame
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
+      
+      // Dispose of Three.js objects
+      if (mountRef.current && renderer.domElement) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
+      
+      // Dispose geometries and materials
+      starsGeometry.dispose();
+      starsMaterial.dispose();
+      planetGeometry.dispose();
+      planetMaterial.dispose();
+      particlesGeometry.dispose();
+      particlesMaterial.dispose();
+      
+      rings.forEach((ring) => {
+        ring.geometry.dispose();
+        ring.material.dispose();
+      });
+      
+      asteroids.forEach((asteroid) => {
+        asteroid.geometry.dispose();
+        asteroid.material.dispose();
+      });
+      
       renderer.dispose();
     };
   }, [onLoadingComplete]);
@@ -318,7 +359,7 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
-              
+
               <div className="relative h-3 bg-white/10 rounded-full overflow-hidden backdrop-blur-sm border border-white/20">
                 <motion.div
                   className="h-full bg-gradient-to-r from-cosmic-purple via-cosmic-pink to-cosmic-blue relative"
