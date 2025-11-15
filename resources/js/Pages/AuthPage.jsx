@@ -1,34 +1,34 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaUser, FaLock, FaEnvelope, FaRocket } from 'react-icons/fa';
-import axios from 'axios';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { FaUser, FaLock, FaEnvelope, FaRocket } from "react-icons/fa";
+import axios from "axios";
 
 export default function AuthPage({ onAuthSuccess }) {
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+    name: "",
+    email: "",
+    password: "",
+    password_confirmation: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleInputChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
-    setError('');
+    setError("");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError("");
 
     try {
-      const endpoint = isLogin ? '/login' : '/register';
+      const endpoint = isLogin ? "/login" : "/register";
       const payload = isLogin
         ? { email: formData.email, password: formData.password }
         : formData;
@@ -37,19 +37,22 @@ export default function AuthPage({ onAuthSuccess }) {
 
       if (response.status === 200 || response.status === 201) {
         // Store user data in localStorage
-        localStorage.setItem('user', JSON.stringify(response.data.user || { email: formData.email }));
-        localStorage.setItem('authenticated', 'true');
-        
+        localStorage.setItem(
+          "user",
+          JSON.stringify(response.data.user || { email: formData.email })
+        );
+        localStorage.setItem("authenticated", "true");
+
         // Call success callback
         if (onAuthSuccess) {
           onAuthSuccess(response.data.user || { email: formData.email });
         }
       }
     } catch (err) {
-      console.error('Auth error:', err);
+      console.error("Auth error:", err);
       setError(
         err.response?.data?.message ||
-        'Authentication failed. Please try again.'
+          "Authentication failed. Please try again."
       );
     } finally {
       setLoading(false);
@@ -58,9 +61,13 @@ export default function AuthPage({ onAuthSuccess }) {
 
   const handleSkip = () => {
     // Allow guest access
-    const guestUser = { name: 'Guest', email: 'guest@beyond-earth.space', isGuest: true };
-    localStorage.setItem('user', JSON.stringify(guestUser));
-    localStorage.setItem('authenticated', 'true');
+    const guestUser = {
+      name: "Guest",
+      email: "guest@beyond-earth.space",
+      isGuest: true,
+    };
+    localStorage.setItem("user", JSON.stringify(guestUser));
+    localStorage.setItem("authenticated", "true");
     if (onAuthSuccess) {
       onAuthSuccess(guestUser);
     }
@@ -125,8 +132,8 @@ export default function AuthPage({ onAuthSuccess }) {
                 onClick={() => setIsLogin(true)}
                 className={`flex-1 py-2 rounded-md transition-all ${
                   isLogin
-                    ? 'bg-gradient-to-r from-cosmic-purple to-cosmic-pink text-white'
-                    : 'text-white/50 hover:text-white'
+                    ? "bg-gradient-to-r from-cosmic-purple to-cosmic-pink text-white"
+                    : "text-white/50 hover:text-white"
                 }`}
               >
                 Login
@@ -135,8 +142,8 @@ export default function AuthPage({ onAuthSuccess }) {
                 onClick={() => setIsLogin(false)}
                 className={`flex-1 py-2 rounded-md transition-all ${
                   !isLogin
-                    ? 'bg-gradient-to-r from-cosmic-purple to-cosmic-pink text-white'
-                    : 'text-white/50 hover:text-white'
+                    ? "bg-gradient-to-r from-cosmic-purple to-cosmic-pink text-white"
+                    : "text-white/50 hover:text-white"
                 }`}
               >
                 Register
@@ -149,7 +156,7 @@ export default function AuthPage({ onAuthSuccess }) {
                 {!isLogin && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
+                    animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
                   >
                     <div className="relative">
@@ -198,7 +205,7 @@ export default function AuthPage({ onAuthSuccess }) {
                 {!isLogin && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
+                    animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
                   >
                     <div className="relative">
@@ -234,7 +241,11 @@ export default function AuthPage({ onAuthSuccess }) {
                 whileTap={{ scale: 0.98 }}
                 className="w-full py-3 bg-gradient-to-r from-cosmic-purple to-cosmic-pink text-white font-semibold rounded-lg hover:shadow-lg hover:shadow-cosmic-purple/50 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Processing...' : isLogin ? 'Launch Mission' : 'Join Expedition'}
+                {loading
+                  ? "Processing..."
+                  : isLogin
+                  ? "Launch Mission"
+                  : "Join Expedition"}
               </motion.button>
             </form>
 

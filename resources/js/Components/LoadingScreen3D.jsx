@@ -1,230 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import { motion } from "framer-motion";
-import * as THREE from "three";
+import Spline from "@splinetool/react-spline";
 
 export default function LoadingScreen3D({ onLoadingComplete }) {
-  const mountRef = useRef(null);
   const [progress, setProgress] = useState(0);
   const [loadingText, setLoadingText] = useState("Initializing...");
+  const [splineLoaded, setSplineLoaded] = useState(false);
 
   useEffect(() => {
-    // Three.js scene setup
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      window.innerWidth / window.innerHeight,
-      0.1,
-      1000
-    );
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 1);
-    mountRef.current.appendChild(renderer.domElement);
-
-    // Optimized starfield - fewer stars for faster loading
-    const starsGeometry = new THREE.BufferGeometry();
-    const starsMaterial = new THREE.PointsMaterial({
-      color: 0xffffff,
-      size: 2,
-      transparent: true,
-      opacity: 0.8,
-      sizeAttenuation: true,
-    });
-
-    const starsVertices = [];
-    const starsSizes = [];
-    for (let i = 0; i < 5000; i++) {
-      const x = (Math.random() - 0.5) * 2000;
-      const y = (Math.random() - 0.5) * 2000;
-      const z = (Math.random() - 0.5) * 2000;
-      starsVertices.push(x, y, z);
-      starsSizes.push(Math.random() * 2);
-    }
-
-    starsGeometry.setAttribute(
-      "position",
-      new THREE.Float32BufferAttribute(starsVertices, 3)
-    );
-    starsGeometry.setAttribute(
-      "size",
-      new THREE.Float32BufferAttribute(starsSizes, 1)
-    );
-    const starField = new THREE.Points(starsGeometry, starsMaterial);
-    scene.add(starField);
-
-    // Optimized planet - lower polygon count
-    const planetGeometry = new THREE.SphereGeometry(2.5, 32, 32);
-    const planetMaterial = new THREE.MeshStandardMaterial({
-      color: 0x4f46e5,
-      emissive: 0x2d1b69,
-      roughness: 0.7,
-      metalness: 0.3,
-    });
-    const planet = new THREE.Mesh(planetGeometry, planetMaterial);
-    scene.add(planet);
-
-    // Create multiple orbital rings
-    const rings = [];
-    const ringColors = [0xec4899, 0x8b5cf6, 0x06b6d4];
-    for (let i = 0; i < 3; i++) {
-      const ringGeometry = new THREE.TorusGeometry(
-        3.5 + i * 0.5,
-        0.08,
-        16,
-        100
-      );
-      const ringMaterial = new THREE.MeshPhongMaterial({
-        color: ringColors[i],
-        emissive: ringColors[i],
-        transparent: true,
-        opacity: 0.6,
-      });
-      const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-      ring.rotation.x = Math.PI / 3 + (i * Math.PI) / 12;
-      ring.rotation.y = (i * Math.PI) / 6;
-      rings.push(ring);
-      scene.add(ring);
-    }
-
-    // Fewer asteroids for faster performance
-    const asteroids = [];
-    for (let i = 0; i < 20; i++) {
-      const size = Math.random() * 0.15 + 0.05;
-      const asteroidGeometry = new THREE.DodecahedronGeometry(size, 0);
-      const asteroidMaterial = new THREE.MeshPhongMaterial({
-        color: 0x888888,
-        emissive: 0x222222,
-      });
-      const asteroid = new THREE.Mesh(asteroidGeometry, asteroidMaterial);
-
-      const distance = 6 + Math.random() * 8;
-      const angle = Math.random() * Math.PI * 2;
-      asteroid.position.x = Math.cos(angle) * distance;
-      asteroid.position.y = (Math.random() - 0.5) * 10;
-      asteroid.position.z = Math.sin(angle) * distance;
-
-      asteroid.userData = {
-        rotationSpeed: (Math.random() - 0.5) * 0.02,
-        orbitSpeed: Math.random() * 0.001 + 0.0005,
-        orbitRadius: distance,
-        orbitAngle: angle,
-      };
-
-      asteroids.push(asteroid);
-      scene.add(asteroid);
-    }
-
-    // Fewer particles for better performance
-    const particlesGeometry = new THREE.BufferGeometry();
-    const particlesMaterial = new THREE.PointsMaterial({
-      color: 0x00ffff,
-      size: 0.1,
-      transparent: true,
-      opacity: 0.6,
-      blending: THREE.AdditiveBlending,
-    });
-
-    const particlesVertices = [];
-    for (let i = 0; i < 300; i++) {
-      const radius = 3.5 + Math.random() * 2;
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.random() * Math.PI;
-
-      const x = radius * Math.sin(phi) * Math.cos(theta);
-      const y = radius * Math.sin(phi) * Math.sin(theta);
-      const z = radius * Math.cos(phi);
-
-      particlesVertices.push(x, y, z);
-    }
-
-    particlesGeometry.setAttribute(
-      "position",
-      new THREE.Float32BufferAttribute(particlesVertices, 3)
-    );
-    const particleSystem = new THREE.Points(
-      particlesGeometry,
-      particlesMaterial
-    );
-    scene.add(particleSystem);
-
-    // Add dynamic lights
-    const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
-    scene.add(ambientLight);
-
-    const pointLight1 = new THREE.PointLight(0x4f46e5, 2, 100);
-    pointLight1.position.set(10, 10, 10);
-    scene.add(pointLight1);
-
-    const pointLight2 = new THREE.PointLight(0xec4899, 1.5, 100);
-    pointLight2.position.set(-10, -5, 5);
-    scene.add(pointLight2);
-
-    const spotLight = new THREE.SpotLight(0xffffff, 1);
-    spotLight.position.set(0, 20, 0);
-    spotLight.angle = Math.PI / 6;
-    spotLight.penumbra = 0.5;
-    scene.add(spotLight);
-
-    camera.position.z = 12;
-    camera.position.y = 2;
-
-    // Animation variables
-    let time = 0;
-    let animationFrameId = null;
-
-    // Animation loop
-    const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
-      time += 0.01;
-
-      // Rotate planet with wobble effect
-      planet.rotation.y += 0.008;
-      planet.rotation.x = Math.sin(time * 0.5) * 0.1;
-
-      // Animate rings - each rotates differently
-      rings.forEach((ring, index) => {
-        ring.rotation.z += 0.002 * (index + 1);
-        ring.rotation.y += 0.001 * (index + 1);
-      });
-
-      // Animate asteroids in orbit
-      asteroids.forEach((asteroid) => {
-        // Rotate asteroid
-        asteroid.rotation.x += asteroid.userData.rotationSpeed;
-        asteroid.rotation.y += asteroid.userData.rotationSpeed * 0.5;
-
-        // Orbit around planet
-        asteroid.userData.orbitAngle += asteroid.userData.orbitSpeed;
-        asteroid.position.x =
-          Math.cos(asteroid.userData.orbitAngle) *
-          asteroid.userData.orbitRadius;
-        asteroid.position.z =
-          Math.sin(asteroid.userData.orbitAngle) *
-          asteroid.userData.orbitRadius;
-      });
-
-      // Rotate particle system
-      particleSystem.rotation.y += 0.001;
-      particleSystem.rotation.x = Math.sin(time * 0.3) * 0.2;
-
-      // Rotate starfield slowly in multiple directions
-      starField.rotation.y += 0.0001;
-      starField.rotation.x += 0.00005;
-
-      // Animate camera for dynamic view
-      camera.position.x = Math.sin(time * 0.2) * 2;
-      camera.position.y = 2 + Math.cos(time * 0.15) * 1;
-      camera.lookAt(0, 0, 0);
-
-      // Pulse lights
-      pointLight1.intensity = 2 + Math.sin(time) * 0.5;
-      pointLight2.intensity = 1.5 + Math.cos(time * 1.5) * 0.3;
-
-      renderer.render(scene, camera);
-    };
-    animate();
-
     // Fast loading progress - complete in 2.5 seconds
     const loadingSteps = [
       { progress: 33, text: "Initializing..." },
@@ -246,58 +29,36 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
       }
     }, 400);
 
-    // Handle window resize
-    const handleResize = () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    };
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup
     return () => {
       clearInterval(loadingInterval);
-      window.removeEventListener("resize", handleResize);
-
-      // Cancel animation frame
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-
-      // Dispose of Three.js objects
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
-
-      // Dispose geometries and materials
-      starsGeometry.dispose();
-      starsMaterial.dispose();
-      planetGeometry.dispose();
-      planetMaterial.dispose();
-      particlesGeometry.dispose();
-      particlesMaterial.dispose();
-
-      rings.forEach((ring) => {
-        ring.geometry.dispose();
-        ring.material.dispose();
-      });
-
-      asteroids.forEach((asteroid) => {
-        asteroid.geometry.dispose();
-        asteroid.material.dispose();
-      });
-
-      renderer.dispose();
     };
   }, [onLoadingComplete]);
 
+  function onLoad(spline) {
+    setSplineLoaded(true);
+  }
+
   return (
     <div className="fixed inset-0 z-50 bg-black overflow-hidden">
-      {/* Three.js Canvas */}
-      <div ref={mountRef} className="absolute inset-0" />
+      {/* Spline 3D Scene - Animated Space Scene */}
+      <div className="absolute inset-0">
+        <Suspense
+          fallback={
+            <div className="w-full h-full bg-gradient-to-br from-purple-900/30 via-black to-pink-900/30 flex items-center justify-center">
+              <div className="text-white text-xl">Loading 3D Scene...</div>
+            </div>
+          }
+        >
+          <Spline
+            scene="https://prod.spline.design/6Wq1Q7YGyM-iab9i/scene.splinecode"
+            onLoad={onLoad}
+            className="w-full h-full"
+          />
+        </Suspense>
+      </div>
 
       {/* Animated Background Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-pink-900/20 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 via-transparent to-pink-900/10 pointer-events-none" />
 
       {/* Loading UI Overlay */}
       <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
