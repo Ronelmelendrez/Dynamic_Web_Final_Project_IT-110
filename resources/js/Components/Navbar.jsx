@@ -1,12 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FaRocket, FaSignOutAlt, FaUser, FaGoogle } from "react-icons/fa";
+import {
+  FaRocket,
+  FaSignOutAlt,
+  FaUser,
+  FaGoogle,
+  FaTimes,
+  FaEnvelope,
+  FaIdCard,
+} from "react-icons/fa";
 import axios from "axios";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState(null);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -29,7 +38,7 @@ export default function Navbar() {
 
     window.addEventListener("scroll", handleScroll);
     document.addEventListener("mousedown", handleClickOutside);
-    
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
@@ -57,6 +66,11 @@ export default function Navbar() {
       // Redirect to home page (which will trigger auth flow)
       window.location.href = "/";
     }
+  };
+
+  const openProfileModal = () => {
+    setShowDropdown(false);
+    setShowProfileModal(true);
   };
 
   return (
@@ -99,7 +113,10 @@ export default function Navbar() {
 
             {/* User Avatar & Dropdown */}
             {user && (
-              <div className="relative pl-4 border-l border-white/20" ref={dropdownRef}>
+              <div
+                className="relative pl-4 border-l border-white/20"
+                ref={dropdownRef}
+              >
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -118,7 +135,7 @@ export default function Navbar() {
                       <FaUser className="text-white text-lg" />
                     </div>
                   )}
-                  
+
                   {/* User Name */}
                   <span className="text-white/90 font-medium hidden lg:block">
                     {user.name}
@@ -136,7 +153,10 @@ export default function Navbar() {
                       className="absolute right-0 mt-3 w-64 bg-gray-900/95 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl overflow-hidden"
                     >
                       {/* User Info Section */}
-                      <div className="p-4 border-b border-white/10">
+                      <button
+                        onClick={openProfileModal}
+                        className="w-full p-4 border-b border-white/10 hover:bg-white/5 transition-colors text-left"
+                      >
                         <div className="flex items-center space-x-3 mb-2">
                           {user.avatar ? (
                             <img
@@ -158,7 +178,7 @@ export default function Navbar() {
                             </p>
                           </div>
                         </div>
-                        
+
                         {/* Google Badge */}
                         {user.google_id && (
                           <div className="flex items-center space-x-2 mt-2 px-3 py-1.5 bg-white/5 rounded-lg">
@@ -168,7 +188,10 @@ export default function Navbar() {
                             </span>
                           </div>
                         )}
-                      </div>
+                        <p className="text-cyan-400 text-xs mt-2 text-center">
+                          Click to view full profile
+                        </p>
+                      </button>
 
                       {/* Sign Out Button */}
                       <button
@@ -197,6 +220,122 @@ export default function Navbar() {
           </div>
         </div>
       </div>
+
+      {/* Profile Modal */}
+      <AnimatePresence>
+        {showProfileModal && user && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm"
+            onClick={() => setShowProfileModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-gradient-to-br from-gray-900 via-gray-900 to-purple-900/50 border border-white/10 rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden"
+            >
+              {/* Header */}
+              <div className="relative p-6 bg-gradient-to-r from-cosmic-purple to-cosmic-pink">
+                <button
+                  onClick={() => setShowProfileModal(false)}
+                  className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-full transition-colors"
+                >
+                  <FaTimes className="text-white text-xl" />
+                </button>
+
+                <div className="flex items-center space-x-4">
+                  {user.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt={user.name}
+                      className="w-20 h-20 rounded-full border-4 border-white shadow-xl"
+                    />
+                  ) : (
+                    <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center border-4 border-white shadow-xl">
+                      <FaUser className="text-white text-3xl" />
+                    </div>
+                  )}
+                  <div>
+                    <h2 className="text-2xl font-bold text-white mb-1">
+                      {user.name}
+                    </h2>
+                    <p className="text-white/80 text-sm">Astronaut Explorer</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Body */}
+              <div className="p-6 space-y-4">
+                {/* Email */}
+                <div className="flex items-start space-x-3 p-4 bg-white/5 rounded-lg border border-white/10">
+                  <FaEnvelope className="text-cosmic-pink text-xl mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-white/60 text-xs uppercase tracking-wider mb-1">
+                      Email Address
+                    </p>
+                    <p className="text-white font-medium break-all">
+                      {user.email}
+                    </p>
+                  </div>
+                </div>
+
+                {/* User ID */}
+                <div className="flex items-start space-x-3 p-4 bg-white/5 rounded-lg border border-white/10">
+                  <FaIdCard className="text-cosmic-purple text-xl mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-white/60 text-xs uppercase tracking-wider mb-1">
+                      User ID
+                    </p>
+                    <p className="text-white font-medium font-mono">
+                      #{user.id}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Google Account */}
+                {user.google_id && (
+                  <div className="flex items-start space-x-3 p-4 bg-white/5 rounded-lg border border-white/10">
+                    <FaGoogle className="text-red-400 text-xl mt-0.5" />
+                    <div className="flex-1">
+                      <p className="text-white/60 text-xs uppercase tracking-wider mb-1">
+                        Google Account
+                      </p>
+                      <p className="text-white font-medium">Connected</p>
+                      <p className="text-white/50 text-xs mt-1">
+                        ID: {user.google_id}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Account Status */}
+                <div className="flex items-start space-x-3 p-4 bg-green-500/10 rounded-lg border border-green-500/30">
+                  <div className="w-3 h-3 bg-green-400 rounded-full mt-1.5 shadow-lg shadow-green-400/50"></div>
+                  <div className="flex-1">
+                    <p className="text-white/60 text-xs uppercase tracking-wider mb-1">
+                      Account Status
+                    </p>
+                    <p className="text-green-400 font-medium">
+                      Active & Verified
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="p-6 bg-white/5 border-t border-white/10">
+                <p className="text-white/50 text-xs text-center">
+                  Member of Beyond Earth Space Exploration Team
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 }
