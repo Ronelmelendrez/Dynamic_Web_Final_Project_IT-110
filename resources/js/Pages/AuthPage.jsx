@@ -63,7 +63,7 @@ export default function AuthPage({ onAuthSuccess }) {
     <div className="fixed inset-0 bg-gradient-to-br from-space-dark via-black to-space-dark overflow-hidden">
       {/* Animated background stars */}
       <div className="absolute inset-0">
-        {[...Array(100)].map((_, i) => (
+        {[...Array(150)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute w-1 h-1 bg-white rounded-full"
@@ -83,6 +83,100 @@ export default function AuthPage({ onAuthSuccess }) {
           />
         ))}
       </div>
+
+      {/* Animated Planet Background */}
+      <motion.div
+        className="absolute right-0 top-0 w-[600px] h-[600px] -translate-y-1/4 translate-x-1/4"
+        initial={{ scale: 3, opacity: 0 }}
+        animate={{ 
+          scale: 1, 
+          opacity: 0.4,
+          rotate: 360,
+        }}
+        transition={{
+          scale: { duration: 1.5, ease: "easeOut" },
+          opacity: { duration: 1.2 },
+          rotate: { duration: 100, repeat: Infinity, ease: "linear" }
+        }}
+      >
+        <div className="relative w-full h-full">
+          {/* Planet Core Glow */}
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 blur-3xl opacity-60" />
+          
+          {/* Planet Surface */}
+          <div className="absolute inset-12 rounded-full bg-gradient-to-br from-cyan-300 via-blue-500 to-indigo-700 overflow-hidden">
+            {/* Atmosphere Glow */}
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-blue-300/40 via-transparent to-transparent" />
+            
+            {/* Surface Details */}
+            <motion.div
+              className="absolute inset-0"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+            >
+              {[...Array(12)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute rounded-full bg-blue-900/30"
+                  style={{
+                    width: `${Math.random() * 40 + 15}%`,
+                    height: `${Math.random() * 40 + 15}%`,
+                    left: `${Math.random() * 60}%`,
+                    top: `${Math.random() * 60}%`,
+                  }}
+                />
+              ))}
+            </motion.div>
+
+            {/* Cloud Layer */}
+            <motion.div
+              className="absolute inset-0 rounded-full"
+              animate={{ rotate: -360 }}
+              transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+            >
+              {[...Array(8)].map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute rounded-full bg-white/10 blur-sm"
+                  style={{
+                    width: `${Math.random() * 30 + 20}%`,
+                    height: `${Math.random() * 20 + 10}%`,
+                    left: `${Math.random() * 70}%`,
+                    top: `${Math.random() * 70}%`,
+                  }}
+                />
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Planetary Rings */}
+          <div className="absolute inset-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" style={{ transform: "translateX(-50%) translateY(-50%) rotateX(75deg)", transformStyle: "preserve-3d" }}>
+            <div className="w-full h-full rounded-full border-8 border-purple-400/30 blur-sm" />
+            <div className="absolute inset-8 rounded-full border-6 border-pink-400/20 blur-sm" />
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Smaller orbiting moon/asteroid */}
+      <motion.div
+        className="absolute w-32 h-32 rounded-full bg-gradient-to-br from-gray-300 via-gray-500 to-gray-700 opacity-30"
+        style={{
+          right: "15%",
+          top: "25%",
+        }}
+        animate={{
+          y: [0, -30, 0],
+          x: [0, 20, 0],
+          rotate: 360,
+        }}
+        transition={{
+          y: { duration: 8, repeat: Infinity, ease: "easeInOut" },
+          x: { duration: 8, repeat: Infinity, ease: "easeInOut" },
+          rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+        }}
+      >
+        <div className="absolute inset-2 rounded-full bg-gradient-to-br from-gray-400 to-gray-800" />
+      </motion.div>
 
       <div className="relative z-10 min-h-screen flex items-center justify-center p-6">
         <motion.div
