@@ -59,20 +59,6 @@ export default function AuthPage({ onAuthSuccess }) {
     }
   };
 
-  const handleSkip = () => {
-    // Allow guest access
-    const guestUser = {
-      name: "Guest",
-      email: "guest@beyond-earth.space",
-      isGuest: true,
-    };
-    localStorage.setItem("user", JSON.stringify(guestUser));
-    localStorage.setItem("authenticated", "true");
-    if (onAuthSuccess) {
-      onAuthSuccess(guestUser);
-    }
-  };
-
   return (
     <div className="fixed inset-0 bg-gradient-to-br from-space-dark via-black to-space-dark overflow-hidden">
       {/* Animated background stars */}
@@ -248,16 +234,6 @@ export default function AuthPage({ onAuthSuccess }) {
                   : "Join Expedition"}
               </motion.button>
             </form>
-
-            {/* Skip/Guest Access */}
-            <div className="mt-6 text-center">
-              <button
-                onClick={handleSkip}
-                className="text-white/50 hover:text-cosmic-pink transition-colors text-sm"
-              >
-                Continue as Guest →
-              </button>
-            </div>
           </motion.div>
 
           {/* Footer */}
