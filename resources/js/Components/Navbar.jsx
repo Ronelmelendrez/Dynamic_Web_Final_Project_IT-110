@@ -33,19 +33,15 @@ export default function Navbar() {
     try {
       // Call logout API
       await axios.post("/logout");
-
+    } catch (error) {
+      console.error("Sign out error:", error);
+    } finally {
       // Clear localStorage
       localStorage.removeItem("user");
       localStorage.removeItem("authenticated");
 
-      // Reload page to show auth screen
-      window.location.reload();
-    } catch (error) {
-      console.error("Sign out error:", error);
-      // Clear localStorage anyway
-      localStorage.removeItem("user");
-      localStorage.removeItem("authenticated");
-      window.location.reload();
+      // Redirect to home page (which will trigger auth flow)
+      window.location.href = "/";
     }
   };
 

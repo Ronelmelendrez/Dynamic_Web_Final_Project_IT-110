@@ -178,11 +178,11 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
       <motion.div
         className="absolute left-10 top-1/2 -translate-y-1/2 z-30"
         style={{
-          x: `${spacecraftPosition * 8}vw`,
+          x: spacecraftPosition * 8,
         }}
         animate={{
-          y: phase === "landing" ? [0, -20, 0, -10, 0] : [0],
-          rotate: phase === "landing" ? [0, -5, 5, -2, 0] : [0],
+          y: phase === "landing" ? [0, -20, 0, -10, 0] : 0,
+          rotate: phase === "landing" ? [0, -5, 5, -2, 0] : 0,
         }}
         transition={{
           y: phase === "landing" ? { duration: 2, ease: "easeInOut" } : {},
@@ -376,7 +376,7 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
                       "linear-gradient(90deg, #06b6d4, #8b5cf6, #ec4899)",
                   }}
                   initial={{ width: 0 }}
-                  animate={{ width: `${progress}%` }}
+                  animate={{ width: progress }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
                 >
                   {/* Scanning Line Effect */}
@@ -447,7 +447,9 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
       <div className="absolute inset-0 pointer-events-none opacity-10">
         <motion.div
           className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-400 to-transparent h-2"
-          animate={{ y: [0, "100vh"] }}
+          animate={{
+            y: [0, typeof window !== "undefined" ? window.innerHeight : 1000],
+          }}
           transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
         />
       </div>
