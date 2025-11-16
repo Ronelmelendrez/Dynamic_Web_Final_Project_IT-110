@@ -163,9 +163,9 @@ export default function LoadingScreen3D({ onLoadingComplete }) {
           {/* Rings */}
           <motion.div
             className="absolute inset-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-            style={{ 
+            style={{
               transform: "translateX(-50%) translateY(-50%) rotateX(75deg)",
-              transformStyle: "preserve-3d" 
+              transformStyle: "preserve-3d",
             }}
           >
             <div className="w-80 h-80 rounded-full border-8 border-purple-400/50 shadow-lg" />
