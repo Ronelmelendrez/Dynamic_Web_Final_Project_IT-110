@@ -13,7 +13,7 @@ export const planetData = {
     name: "Mercury",
     description:
       "The smallest and innermost planet. No atmosphere, extreme temperatures (430°C to -180°C). Orbital period: 88 days.",
-    modelPath: "/src/assets/models/mercury.glb",
+    modelPath: "/models/mercury.glb",
     radius: 0.8,
     color: 0x888888,
     orbitRadius: 12,
@@ -25,7 +25,7 @@ export const planetData = {
     name: "Venus",
     description:
       "Earth's 'sister planet' with a toxic atmosphere of CO₂ and sulfuric acid clouds. Hottest planet due to greenhouse effect (465°C).",
-    modelPath: "/src/assets/models/venus.glb",
+    modelPath: "/models/venus.glb",
     radius: 1.2,
     color: 0xffcc99,
     orbitRadius: 16,
@@ -37,7 +37,7 @@ export const planetData = {
     name: "Earth",
     description:
       "Our home - the only known planet with life. 71% water surface, protective atmosphere and magnetic field. One moon.",
-    modelPath: "/src/assets/models/earth.glb",
+    modelPath: "/models/earth.glb",
     radius: 1.3,
     color: 0x4facfe,
     orbitRadius: 20,
@@ -50,7 +50,7 @@ export const planetData = {
     name: "Mars",
     description:
       "The Red Planet with iron oxide surface. Thin CO₂ atmosphere, polar ice caps, and the largest volcano Olympus Mons.",
-    modelPath: "/src/assets/models/mars.glb",
+    modelPath: "/models/mars.glb",
     radius: 1.1,
     color: 0xff6b35,
     orbitRadius: 24,
@@ -62,7 +62,7 @@ export const planetData = {
     name: "Jupiter",
     description:
       "Largest planet - a gas giant with Great Red Spot storm. Has 79 moons including Ganymede, the largest moon in solar system.",
-    modelPath: "/src/assets/models/jupiter.glb",
+    modelPath: "/models/jupiter.glb",
     radius: 3.0,
     color: 0xffcc99,
     orbitRadius: 32,
@@ -74,7 +74,7 @@ export const planetData = {
     name: "Saturn",
     description:
       "Famous for its spectacular ring system. Gas giant with density lower than water - it would float! Has 82 moons.",
-    modelPath: "/src/assets/models/saturn.glb",
+    modelPath: "/models/saturn.glb",
     radius: 2.5,
     color: 0xffe4b5,
     orbitRadius: 40,
@@ -87,7 +87,7 @@ export const planetData = {
     name: "Uranus",
     description:
       "Ice giant that rotates on its side. Pale blue from methane, has 13 faint rings and 27 moons. -224°C surface temperature.",
-    modelPath: "/src/assets/models/uranus.glb",
+    modelPath: "/models/uranus.glb",
     radius: 1.8,
     color: 0xafeeee,
     orbitRadius: 48,
@@ -99,7 +99,7 @@ export const planetData = {
     name: "Neptune",
     description:
       "The windiest planet with speeds up to 2,100 km/h. Ice giant with Great Dark Spot storm. Has 14 moons.",
-    modelPath: "/src/assets/models/neptune.glb",
+    modelPath: "/models/neptune.glb",
     radius: 1.8,
     color: 0x4169e1,
     orbitRadius: 56,

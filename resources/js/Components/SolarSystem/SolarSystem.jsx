@@ -223,9 +223,13 @@ export default function SolarSystem() {
           type: "star",
           rotationSpeed: 0.005,
         };
-        
+
         // Add solar corona
-        const coronaGeometry = new THREE.SphereGeometry(data.radius * 1.1, 32, 32);
+        const coronaGeometry = new THREE.SphereGeometry(
+          data.radius * 1.1,
+          32,
+          32
+        );
         const coronaMaterial = new THREE.MeshBasicMaterial({
           color: 0xff4500,
           transparent: true,
