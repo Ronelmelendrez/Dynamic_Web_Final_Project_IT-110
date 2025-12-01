@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { 
-  PerspectiveCamera, 
-  Float, 
+import {
+  PerspectiveCamera,
+  Float,
   MeshDistortMaterial,
   Sparkles,
   Trail,
-  useTexture 
+  useTexture,
 } from "@react-three/drei";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -101,7 +101,12 @@ function SpacecraftModel({ scrollProgress }) {
         </mesh>
 
         {/* Wings with Tailwind indigo */}
-        <mesh position={[-0.4, 0, 0]} rotation={[0, 0, Math.PI / 6]} castShadow receiveShadow>
+        <mesh
+          position={[-0.4, 0, 0]}
+          rotation={[0, 0, Math.PI / 6]}
+          castShadow
+          receiveShadow
+        >
           <boxGeometry args={[0.6, 0.05, 0.3]} />
           <meshStandardMaterial
             color="#4f46e5" // Tailwind indigo-600
@@ -111,7 +116,12 @@ function SpacecraftModel({ scrollProgress }) {
             emissiveIntensity={0.3}
           />
         </mesh>
-        <mesh position={[0.4, 0, 0]} rotation={[0, 0, -Math.PI / 6]} castShadow receiveShadow>
+        <mesh
+          position={[0.4, 0, 0]}
+          rotation={[0, 0, -Math.PI / 6]}
+          castShadow
+          receiveShadow
+        >
           <boxGeometry args={[0.6, 0.05, 0.3]} />
           <meshStandardMaterial
             color="#4f46e5" // Tailwind indigo-600
@@ -176,7 +186,7 @@ function SpacecraftModel({ scrollProgress }) {
 // Main 3D Scene Component with enhanced R3F features
 function Scene3D({ scrollProgress }) {
   const lightRef = useRef();
-  
+
   // Animate lights with GSAP + R3F
   useFrame((state) => {
     if (lightRef.current) {
@@ -193,11 +203,11 @@ function Scene3D({ scrollProgress }) {
       <ambientLight intensity={0.3} color="#e0f2fe" />
 
       {/* Main directional light with shadows */}
-      <directionalLight 
+      <directionalLight
         ref={lightRef}
-        position={[5, 5, 5]} 
-        intensity={1} 
-        castShadow 
+        position={[5, 5, 5]}
+        intensity={1}
+        castShadow
         shadow-mapSize={[2048, 2048]}
         color="#fef3c7"
       />
@@ -208,11 +218,11 @@ function Scene3D({ scrollProgress }) {
       <pointLight position={[0, 5, -5]} color="#ec4899" intensity={0.3} />
 
       {/* R3F Drei Sparkles for space dust */}
-      <Sparkles 
-        count={200} 
-        scale={15} 
-        size={2} 
-        speed={0.3} 
+      <Sparkles
+        count={200}
+        scale={15}
+        size={2}
+        speed={0.3}
         opacity={0.6}
         color="#60a5fa"
       />
@@ -305,10 +315,10 @@ export default function StickySpacecraft() {
         <Canvas
           shadows
           dpr={[1, 2]} // Device pixel ratio for performance
-          gl={{ 
-            antialias: true, 
+          gl={{
+            antialias: true,
             alpha: true,
-            powerPreference: "high-performance" 
+            powerPreference: "high-performance",
           }}
           className="bg-transparent" // Tailwind for transparent background
         >
