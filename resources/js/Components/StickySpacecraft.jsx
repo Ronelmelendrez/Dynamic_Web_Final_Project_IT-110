@@ -1,6 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { useGLTF, PerspectiveCamera, Float } from "@react-three/drei";
+import { 
+  PerspectiveCamera, 
+  Float, 
+  MeshDistortMaterial,
+  Sparkles,
+  Trail,
+  useTexture 
+} from "@react-three/drei";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import * as THREE from "three";
@@ -38,84 +45,95 @@ function SpacecraftModel({ scrollProgress }) {
     );
   }, []);
 
-  // Animate based on scroll
+  // GSAP animation based on scroll with enhanced easing
   useFrame((state) => {
     if (!groupRef.current) return;
 
     const scroll = scrollProgress;
 
-    // Horizontal S-curve path
+    // GSAP-style easing applied to positions
+    const easeOutQuad = (t) => t * (2 - t);
+    const easedScroll = easeOutQuad(scroll);
+
+    // Horizontal S-curve path with Tailwind spacing values
     groupRef.current.position.x = Math.sin(scroll * Math.PI * 2) * 2;
 
-    // Vertical movement
-    groupRef.current.position.y = -scroll * 3 + 1;
+    // Vertical movement with smooth easing
+    groupRef.current.position.y = -easedScroll * 3 + 1;
 
-    // Continuous rotation
+    // Continuous rotation (720 degrees total)
     groupRef.current.rotation.y = scroll * Math.PI * 4;
     groupRef.current.rotation.z = Math.sin(scroll * Math.PI * 2) * 0.3;
 
-    // Pulse scale
+    // Pulse scale with sine wave
     const pulseScale = 1 + Math.sin(state.clock.elapsedTime * 2) * 0.05;
-    groupRef.current.scale.setScalar(pulseScale);
+    groupRef.current.scale.setScalar(pulseScale * (1 + scroll * 0.5));
   });
 
   return (
+    // R3F Drei Float component for organic motion
     <Float speed={2} rotationIntensity={0.3} floatIntensity={0.5}>
       <group ref={groupRef}>
-        {/* Main Hull - Futuristic shape */}
-        <mesh position={[0, 0, 0]} ref={meshRef} castShadow>
+        {/* Main Hull - Futuristic shape with Tailwind indigo colors */}
+        <mesh position={[0, 0, 0]} ref={meshRef} castShadow receiveShadow>
           <coneGeometry args={[0.3, 1.2, 4]} />
           <meshStandardMaterial
-            color="#6366f1"
+            color="#6366f1" // Tailwind indigo-500
             metalness={0.8}
             roughness={0.2}
-            emissive="#8b5cf6"
+            emissive="#8b5cf6" // Tailwind violet-500
             emissiveIntensity={0.5}
           />
         </mesh>
 
-        {/* Cockpit Window */}
+        {/* Cockpit Window with Tailwind blue palette */}
         <mesh position={[0, 0.3, 0.2]} castShadow>
           <sphereGeometry args={[0.15, 16, 16]} />
           <meshStandardMaterial
-            color="#3b82f6"
+            color="#3b82f6" // Tailwind blue-500
             metalness={0.9}
             roughness={0.1}
             transparent
             opacity={0.7}
-            emissive="#60a5fa"
+            emissive="#60a5fa" // Tailwind blue-400
             emissiveIntensity={0.8}
           />
         </mesh>
 
-        {/* Wings */}
-        <mesh position={[-0.4, 0, 0]} rotation={[0, 0, Math.PI / 6]} castShadow>
+        {/* Wings with Tailwind indigo */}
+        <mesh position={[-0.4, 0, 0]} rotation={[0, 0, Math.PI / 6]} castShadow receiveShadow>
           <boxGeometry args={[0.6, 0.05, 0.3]} />
           <meshStandardMaterial
-            color="#4f46e5"
+            color="#4f46e5" // Tailwind indigo-600
             metalness={0.7}
             roughness={0.3}
-            emissive="#6366f1"
+            emissive="#6366f1" // Tailwind indigo-500
             emissiveIntensity={0.3}
           />
         </mesh>
-        <mesh position={[0.4, 0, 0]} rotation={[0, 0, -Math.PI / 6]} castShadow>
+        <mesh position={[0.4, 0, 0]} rotation={[0, 0, -Math.PI / 6]} castShadow receiveShadow>
           <boxGeometry args={[0.6, 0.05, 0.3]} />
           <meshStandardMaterial
-            color="#4f46e5"
+            color="#4f46e5" // Tailwind indigo-600
             metalness={0.7}
             roughness={0.3}
-            emissive="#6366f1"
+            emissive="#6366f1" // Tailwind indigo-500
             emissiveIntensity={0.3}
           />
         </mesh>
 
-        {/* Engine Glow */}
-        <pointLight position={[0, -0.6, 0]} color="#ec4899" intensity={2} distance={3} />
+        {/* Engine Glow with Tailwind pink */}
+        <pointLight
+          position={[0, -0.6, 0]}
+          color="#ec4899" // Tailwind pink-500
+          intensity={2}
+          distance={3}
+          decay={2}
+        />
         <mesh position={[0, -0.6, 0]}>
           <sphereGeometry args={[0.15, 16, 16]} />
           <meshStandardMaterial
-            color="#ec4899"
+            color="#ec4899" // Tailwind pink-500
             emissive="#ec4899"
             emissiveIntensity={2}
             transparent
@@ -123,12 +141,12 @@ function SpacecraftModel({ scrollProgress }) {
           />
         </mesh>
 
-        {/* Exhaust Trail Particles */}
+        {/* Exhaust Trail Particles with Tailwind orange */}
         {[...Array(5)].map((_, i) => (
           <mesh key={i} position={[0, -0.8 - i * 0.2, 0]}>
             <sphereGeometry args={[0.05 - i * 0.008, 8, 8]} />
             <meshStandardMaterial
-              color="#f97316"
+              color="#f97316" // Tailwind orange-500
               emissive="#f97316"
               emissiveIntensity={1.5 - i * 0.2}
               transparent
@@ -137,50 +155,91 @@ function SpacecraftModel({ scrollProgress }) {
           </mesh>
         ))}
 
-        {/* Detail Lights */}
-        <pointLight position={[0.3, 0.2, 0.2]} color="#06b6d4" intensity={1} distance={2} />
-        <pointLight position={[-0.3, 0.2, 0.2]} color="#06b6d4" intensity={1} distance={2} />
+        {/* Detail Lights with Tailwind cyan */}
+        <pointLight
+          position={[0.3, 0.2, 0.2]}
+          color="#06b6d4" // Tailwind cyan-500
+          intensity={1}
+          distance={2}
+        />
+        <pointLight
+          position={[-0.3, 0.2, 0.2]}
+          color="#06b6d4" // Tailwind cyan-500
+          intensity={1}
+          distance={2}
+        />
       </group>
     </Float>
   );
 }
 
-// Main 3D Scene Component
+// Main 3D Scene Component with enhanced R3F features
 function Scene3D({ scrollProgress }) {
+  const lightRef = useRef();
+  
+  // Animate lights with GSAP + R3F
+  useFrame((state) => {
+    if (lightRef.current) {
+      lightRef.current.intensity = 1 + Math.sin(state.clock.elapsedTime) * 0.3;
+    }
+  });
+
   return (
     <>
+      {/* R3F Drei PerspectiveCamera */}
       <PerspectiveCamera makeDefault position={[0, 0, 5]} fov={50} />
-      
-      {/* Ambient lighting */}
-      <ambientLight intensity={0.3} />
-      
-      {/* Main directional light */}
-      <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
-      
-      {/* Accent lights */}
+
+      {/* Ambient lighting with Tailwind color values */}
+      <ambientLight intensity={0.3} color="#e0f2fe" />
+
+      {/* Main directional light with shadows */}
+      <directionalLight 
+        ref={lightRef}
+        position={[5, 5, 5]} 
+        intensity={1} 
+        castShadow 
+        shadow-mapSize={[2048, 2048]}
+        color="#fef3c7"
+      />
+
+      {/* Accent lights using Tailwind purple/cyan palette */}
       <pointLight position={[-5, 0, 0]} color="#8b5cf6" intensity={0.5} />
       <pointLight position={[5, 0, 0]} color="#06b6d4" intensity={0.5} />
+      <pointLight position={[0, 5, -5]} color="#ec4899" intensity={0.3} />
 
-      {/* Spacecraft */}
+      {/* R3F Drei Sparkles for space dust */}
+      <Sparkles 
+        count={200} 
+        scale={15} 
+        size={2} 
+        speed={0.3} 
+        opacity={0.6}
+        color="#60a5fa"
+      />
+
+      {/* Spacecraft with Float animation */}
       <SpacecraftModel scrollProgress={scrollProgress} />
 
-      {/* Background stars */}
+      {/* Animated star field */}
       <Stars />
     </>
   );
 }
 
-// Animated stars background
+// Animated stars background using R3F
 function Stars() {
   const starsRef = useRef();
 
+  // R3F useFrame for continuous animation
   useFrame((state) => {
     if (starsRef.current) {
+      // Slow rotation for parallax effect
       starsRef.current.rotation.y = state.clock.elapsedTime * 0.05;
       starsRef.current.rotation.x = state.clock.elapsedTime * 0.02;
     }
   });
 
+  // Memoize star positions for performance
   const starPositions = React.useMemo(() => {
     const positions = [];
     for (let i = 0; i < 1000; i++) {
@@ -202,6 +261,7 @@ function Stars() {
           itemSize={3}
         />
       </bufferGeometry>
+      {/* Tailwind white color */}
       <pointsMaterial size={0.05} color="#ffffff" transparent opacity={0.8} />
     </points>
   );
@@ -222,7 +282,7 @@ export default function StickySpacecraft() {
         end: "bottom bottom",
         onUpdate: (self) => {
           setScrollProgress(self.progress);
-          
+
           // Hide at bottom
           if (self.progress > 0.95) {
             setVisible(false);
@@ -240,32 +300,38 @@ export default function StickySpacecraft() {
 
   return (
     <>
-      {/* 3D Canvas */}
+      {/* R3F Canvas with optimized settings */}
       <div className="fixed top-0 left-0 w-full h-full z-50 pointer-events-none">
         <Canvas
           shadows
-          gl={{ antialias: true, alpha: true }}
-          style={{ background: "transparent" }}
+          dpr={[1, 2]} // Device pixel ratio for performance
+          gl={{ 
+            antialias: true, 
+            alpha: true,
+            powerPreference: "high-performance" 
+          }}
+          className="bg-transparent" // Tailwind for transparent background
         >
           <Scene3D scrollProgress={scrollProgress} />
         </Canvas>
       </div>
 
-      {/* Mission Badge - 2D Overlay */}
-      <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
-        <div className="relative opacity-90">
-          {/* Corner decorations */}
-          <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-cyan-400" />
-          <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-cyan-400" />
-          <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-cyan-400" />
-          <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-cyan-400" />
+      {/* Mission Badge - Tailwind CSS overlay */}
+      <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-opacity duration-500">
+        <div className="relative opacity-90 animate-pulse">
+          {/* Corner decorations - Tailwind borders */}
+          <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-cyan-400 transition-all duration-300" />
+          <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-cyan-400 transition-all duration-300" />
+          <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-cyan-400 transition-all duration-300" />
+          <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-cyan-400 transition-all duration-300" />
 
-          <div className="px-5 py-2 bg-black/80 backdrop-blur-md border border-cyan-400/60 rounded">
+          {/* Tailwind badge styling */}
+          <div className="px-5 py-2 bg-black/80 backdrop-blur-md border border-cyan-400/60 rounded shadow-lg shadow-cyan-500/50">
             <div className="text-xs font-bold text-cyan-300 tracking-wider mb-0.5">
               EXPLORER-1
             </div>
             <div className="text-[9px] text-cyan-400/80 font-mono tracking-wide">
-              3D DEEP SPACE MISSION
+              3D DEEP SPACE MISSION • R3F + GSAP
             </div>
           </div>
         </div>
